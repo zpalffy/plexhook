@@ -1,0 +1,4 @@
+pnpm start
+pnpm dev
+pnpm dlx npm-check-updates
+open https://github.com/zpalffy/ok  # learn about the ok command runner

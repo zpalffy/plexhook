@@ -1,0 +1,29 @@
+{
+  "name": "plexhook",
+  "version": "1.0.0",
+  "description": "Plex webhook receiver with notifications and event logging",
+  "keywords": [
+    "plex",
+    "webhooks",
+    "notifications",
+    "node"
+  ],
+  "license": "ISC",
+  "author": "Eric Olson <https://github.com/zpalffy>",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "node-notifier": "^10.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
