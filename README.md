@@ -4,6 +4,10 @@ A lightweight Node.js server that receives [Plex webhooks](https://support.plex.
 
 > Requires a [Plex Pass](https://www.plex.tv/plex-pass/) subscription to use webhooks.
 
+## Purpose
+
+plexhook is meant to be a simple, hackable companion to your Plex server. The goal is to make Plex events visible — either as desktop notifications when media plays, as structured JSON logged to the terminal, or as a quick web view of recent activity. It's a foundation for routing Plex events wherever you want them.
+
 ## Features
 
 - Desktop notification on `media.play` with title, player name, and user
