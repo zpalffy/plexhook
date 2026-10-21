@@ -11,7 +11,7 @@ plexhook is meant to be a simple, hackable companion to your Plex server. The go
 ## Features
 
 - Desktop notification on `media.play` with title, player name, and user
-- Keeps the last 10 events in memory, accessible via `GET /`
+- Keeps the last 10 events in memory, viewable as a web page or JSON at `GET /`
 - Works on macOS, Windows, and Linux (headless servers receive webhooks fine; notifications just won't fire)
 
 ## Requirements
@@ -75,12 +75,17 @@ Requests without a matching token will be rejected with a `401`. If `PLEX_TOKEN`
 
 ## Note on Privacy
 
-`GET /` is unauthenticated and returns recent events including usernames, player names, and IP addresses. If your server is publicly accessible, consider putting it behind a reverse proxy with auth, or restricting access to your local network.
+`GET /` and `GET /events.json` are unauthenticated and show recent events including usernames, player names, and IP addresses. If your server is publicly accessible, consider putting it behind a reverse proxy with auth, or restricting access to your local network.
 
 ## Viewing Recent Events
 
+Open `http://localhost:8001/` in a browser to see the last 10 events as a live-updating page (it refreshes every 30 seconds). Each event has a **Raw payload** toggle showing the full JSON Plex sent.
+
+For the raw JSON, use `/events.json`, or request `/` with anything other than a browser:
+
 ```bash
 curl http://localhost:8001/
+curl http://localhost:8001/events.json
 ```
 
-Returns the last 10 webhook payloads as JSON.
+Both return the last 10 webhook payloads as JSON.

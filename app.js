@@ -4,6 +4,7 @@ const path = require("path");
 const express = require("express");
 const multer = require("multer");
 const notifier = require("node-notifier");
+const { mediaTitle, renderEventLog } = require("./views");
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -22,6 +23,13 @@ const upload = multer({
 const events = [];
 
 app.get("/", (req, res) => {
+  if (req.accepts(["json", "html"]) === "html") {
+    return res.send(renderEventLog(events));
+  }
+  res.json(events);
+});
+
+app.get("/events.json", (req, res) => {
   res.json(events);
 });
 
@@ -40,24 +48,12 @@ app.post("/data", (req, res, next) => {
   }
 
   if (payload.event === "media.play") {
-    let t = payload.Metadata.year
-      ? `${payload.Metadata.title} (${payload.Metadata.year})`
-      : payload.Metadata.title;
-    let icon = coverFile;
-
-    if (payload.Metadata.grandparentTitle) {
-      const { title, index, grandparentThumb, grandparentTitle, parentIndex } =
-        payload.Metadata;
-
-      t =
-        parentIndex && index
-          ? `${grandparentTitle} S${parentIndex}E${index} ${title}`
-          : `${grandparentTitle}: ${title}`;
-
-      if (grandparentThumb && grandparentThumb.startsWith("http")) {
-        icon = grandparentThumb;
-      }
-    }
+    const t = mediaTitle(payload.Metadata);
+    const { grandparentThumb } = payload.Metadata;
+    const icon =
+      grandparentThumb && grandparentThumb.startsWith("http")
+        ? grandparentThumb
+        : coverFile;
 
     notifier.notify({
       title: t,
