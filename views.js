@@ -78,7 +78,25 @@ const renderEvent = (payload) => {
     </li>`;
 };
 
-const renderEventLog = (events) => `<!doctype html>
+const renderUpdateStatus = (update) => {
+  if (!update) return "";
+  const server = escape(update.serverName || "Plex Media Server");
+  if (!update.updateAvailable) {
+    return ` · ${server} ${escape(update.installed.split("-")[0])} is up to date`;
+  }
+  return "";
+};
+
+const renderUpdateBanner = (update) =>
+  update?.updateAvailable
+    ? `<a class="update" href="https://www.plex.tv/media-server-downloads/" target="_blank" rel="noopener">
+        <strong>Plex update available</strong>
+        <span>${escape(update.serverName || "Plex Media Server")} is on ${escape(update.installed.split("-")[0])} · ${escape(update.latest.split("-")[0])} is out</span>
+        <span class="arrow">→</span>
+      </a>`
+    : "";
+
+const renderEventLog = (events, update) => `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -136,6 +154,15 @@ const renderEventLog = (events) => `<!doctype html>
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   .json-link:hover { border-color: var(--muted); }
+  .update {
+    display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 14px 16px;
+    border-radius: 14px; text-decoration: none; color: var(--text);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  .update span { color: var(--muted); font-size: 13px; }
+  .update .arrow { margin-left: auto; color: var(--accent); font-size: 16px; }
+  .update:hover { border-color: var(--accent); }
   ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .event {
     display: flex; gap: 16px; padding: 16px; background: var(--surface);
@@ -182,10 +209,11 @@ const renderEventLog = (events) => `<!doctype html>
   <header>
     <div>
       <h1><span class="logo"><svg viewBox="0 0 24 24" fill="currentColor">${icons.play}</svg></span>plexhook</h1>
-      <div class="subtitle"><span class="live">Last ${events.length} event${events.length === 1 ? "" : "s"} · refreshes automatically</span></div>
+      <div class="subtitle"><span class="live">Last ${events.length} event${events.length === 1 ? "" : "s"} · refreshes automatically</span>${renderUpdateStatus(update)}</div>
     </div>
     <a class="json-link" href="/events.json">{ } JSON</a>
   </header>
+  ${renderUpdateBanner(update)}
   ${events.length
     ? `<ul>${events.map(renderEvent).join("")}</ul>`
     : `<div class="empty"><strong>No events yet</strong>Play something in Plex and it will show up here.</div>`}

@@ -5,6 +5,7 @@ const express = require("express");
 const multer = require("multer");
 const notifier = require("node-notifier");
 const { mediaTitle, renderEventLog } = require("./views");
+const { checkForUpdate, getUpdateStatus } = require("./updates");
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -24,7 +25,7 @@ const events = [];
 
 app.get("/", (req, res) => {
   if (req.accepts(["json", "html"]) === "html") {
-    return res.send(renderEventLog(events));
+    return res.send(renderEventLog(events, getUpdateStatus()));
   }
   res.json(events);
 });
@@ -46,6 +47,7 @@ app.post("/data", (req, res, next) => {
   if (events.unshift(payload) > 10) {
     events.pop();
   }
+  checkForUpdate(req.ip, payload.Server?.title);
 
   if (payload.event === "media.play") {
     const t = mediaTitle(payload.Metadata);

@@ -12,6 +12,7 @@ plexhook is meant to be a simple, hackable companion to your Plex server. The go
 
 - Desktop notification on `media.play` with title, player name, and user
 - Keeps the last 10 events in memory, viewable as a web page or JSON at `GET /`
+- Checks whether a Plex Media Server update is available (at most hourly, triggered by incoming webhooks) and shows it on the event page, with a one-time desktop notification per new version. No token or extra config needed: plexhook asks the server that sent the webhook for its version and compares it with the latest release on plex.tv
 - Works on macOS, Windows, and Linux (headless servers receive webhooks fine; notifications just won't fire)
 
 ## Requirements
