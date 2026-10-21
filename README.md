@@ -16,7 +16,7 @@ plexhook is meant to be a simple, hackable companion to your Plex server. The go
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) 18+
+- [Node.js](https://nodejs.org/) 22.22+ or 24.15+
 - [pnpm](https://pnpm.io/)
 
 ## Installation
